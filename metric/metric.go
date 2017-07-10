@@ -269,6 +269,12 @@ func (m *metric) Split(maxSize int) []telegraf.Metric {
 }
 
 func (m *metric) Fields() map[string]interface{} {
+	defer func() {
+		if r := recover(); r != nil {
+			panic(fmt.Sprintf("Recovered in metric.Fields(); m.fields: %q\n", m.fields))
+		}
+	}()
+
 	fieldMap := map[string]interface{}{}
 	i := 0
 	for {
